@@ -1,0 +1,103 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+public class RunBloodData {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        List<BloodData> bloodDataList = new ArrayList<>();
+        boolean continueRunning = true;
+
+        while (continueRunning) {
+            System.out.println("\n--- Blood Bank System ---");
+            System.out.println("1. Add Patient Blood Data");
+            System.out.println("2. View All Blood Data");
+            System.out.println("3. Exit");
+            System.out.print("Choose an option (1-3): ");
+            int option = sc.nextInt();
+            sc.nextLine();
+
+            switch (option) {
+                case 1:
+                    addBloodData(sc, bloodDataList);
+                    break;
+                case 2:
+                    viewAllBloodData(bloodDataList);
+                    break;
+                case 3:
+                    continueRunning = false;
+                    break;
+                default:
+                    System.out.println("Invalid option, please choose again.");
+            }
+        }
+        sc.close();
+    }
+
+    private static void addBloodData(Scanner sc, List<BloodData> bloodDataList) {
+        String patientName = "";
+        String bloodType = "";
+        char rhFactor = ' ';
+
+        System.out.print("Enter the name of the patient: ");
+        patientName = sc.nextLine();
+
+        while (true) {
+            System.out.print("Enter the blood type of the patient (A, B, AB, O): ");
+            bloodType = sc.nextLine().toUpperCase();
+            if (bloodType.equals("A") || bloodType.equals("B") || bloodType.equals("AB") || bloodType.equals("O")) {
+                break;
+            } else {
+                System.out.println("Invalid blood type. Please enter A, B, AB, or O.");
+            }
+        }
+
+        while (true) {
+            System.out.print("Enter the Rhesus factor (+ or -): ");
+            String input = sc.nextLine();
+            if (input.equals("+") || input.equals("-")) {
+                rhFactor = input.charAt(0);
+                break;
+            } else {
+                System.out.println("Invalid Rhesus factor. Please enter + or -.");
+            }
+        }
+
+        BloodData bloodData = new BloodData(patientName, bloodType, rhFactor); // rhFactor is - or + patient blood type
+        bloodDataList.add(bloodData);
+        System.out.println("Blood data added successfully!");
+    }
+
+    private static void viewAllBloodData(List<BloodData> bloodDataList) {
+        if (bloodDataList.isEmpty()) {
+            System.out.println("No blood data available.");
+        } else {
+            System.out.println("\n--- Blood Data Records ---");
+            for (BloodData data : bloodDataList) {
+                data.display();
+            }
+        }
+    }
+}
+
+class BloodData {
+    private String patientName;
+    private String bloodType;
+    private char rhFactor;
+
+    public BloodData() {
+        this.patientName = "Unknown";
+        this.bloodType = "O";
+        this.rhFactor = '+';
+    }
+
+    public BloodData(String patientName, String bloodType, char rhFactor) {
+        this.patientName = patientName;
+        this.bloodType = bloodType;
+        this.rhFactor = rhFactor;
+    }
+
+    public void display() {
+        System.out.println("Patient Name: " + patientName + ", Blood Type: " + bloodType + rhFactor);
+    }
+}
